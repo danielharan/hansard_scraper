@@ -1,0 +1,3 @@
+= Hansard scraper
+
+Parliament's minutes ("Hansard") are stuck in the age of dead trees. This project is a first step to making them really digital.
