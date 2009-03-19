@@ -1,3 +1,13 @@
 = Hansard scraper
 
 Parliament's minutes ("Hansard") are stuck in the age of dead trees. This project is a first step to making them really digital.
+
+
+= Background
+
+The last session:
+http://www2.parl.gc.ca/housechamberbusiness/chambersittings.aspx?Parl=40&Ses=2&Language=E&Mode=2
+
+A couple sample pages are saved in hansards/
+
+The objective of the project is to extract structured data from that html soup.
