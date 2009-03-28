@@ -1,4 +1,4 @@
-require 'test_helper'
+[require 'test_helper'
 require '../extractor'
 require 'hpricot'
 
@@ -25,4 +25,11 @@ class ExtractorTest < Test::Unit::TestCase
     assert_equal first, intervention.paragraphs.first
     assert_equal second, intervention.paragraphs.last
   end
+  
+  def test_intervention_with_multiple_paragraphs
+    intervention = @extractor.intervention('Int-2655773')
+    assert_not_nil intervention
+    assert_equal 4, intervention.paragraphs.length
+  end
+  
 end

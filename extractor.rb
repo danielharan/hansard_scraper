@@ -27,8 +27,9 @@ class Extractor
   
   def extract_following_paragraphs(p)
     paras = []
-    while (p = p.next_sibling.next_sibling) do
-      break unless p.name == 'p'
+    while (p = p.next_sibling) do
+      break unless p.name == 'a' && p.attributes['name'].match(/Para.*/)
+      p = p.next_sibling
       paras << strip_inner(p)
     end
     paras
