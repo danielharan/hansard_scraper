@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'hpricot'
+
 require File.join(File.dirname(__FILE__), 'intervention')
+require File.join(File.dirname(__FILE__), 'toc_link')
 
 class Extractor
   attr_accessor :contents
@@ -43,8 +45,38 @@ class Extractor
     raise "oops"
   end
   
+  def toc
+    toc_links = []
+    toc_start = (@contents / "a[@href='#EndOfToc']").first
+    toc_end   = (@contents / "a[@name='EndOfToc']").first
+    
+    header1, header2, header3 = '', '', ''
+    Hpricot::Elements.expand(toc_start, toc_end).each do |toc_element|
+      next if toc_element.is_a?(Hpricot::Text) ||  toc_element.name != "div"
+      
+      case toc_element.attributes["class"]
+      when 'TocObTitle'
+        header1 = toc_element.inner_text
+      when 'TocSbTitle'
+        header2 = inner_toc_link(toc_element)
+      when 'toc_SOBQualifier'
+        header3 = inner_toc_link(toc_element)
+      when 'toc_Intervention'
+        anchor = inner_toc_link(toc_element)
+      else
+        next
+      end
+      
+      toc_links << TocLink.new(header1, header2, header3, anchor)
+    end
+  end
+  
   private
     def strip_inner(el)
       el.inner_text.strip.gsub(/^\?*/,'')
+    end
+    
+    def inner_toc_link(e)
+      (e / "a[@class='tocLink']").first.inner_text
     end
 end
