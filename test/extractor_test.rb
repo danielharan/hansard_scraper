@@ -13,7 +13,7 @@ class ExtractorTest < Test::Unit::TestCase
   end
   
   def test_intervention
-    intervention = @extractor.intervention('Int-2655693')
+    intervention = @extractor.intervention('#Int-2655693')
     assert_not_nil intervention
     expected_link = "/HousePublications/GetWebOptionsCallBack.aspx?SourceSystem=PRISM&ResourceType=Affiliation&ResourceID=128173&language=1&DisplayMode=2"
     assert_equal expected_link, intervention.link
@@ -27,7 +27,7 @@ class ExtractorTest < Test::Unit::TestCase
   end
   
   def test_intervention_with_multiple_paragraphs
-    intervention = @extractor.intervention('Int-2655773')
+    intervention = @extractor.intervention('#Int-2655773')
     assert_not_nil intervention
     assert_equal 4, intervention.paragraphs.length
   end

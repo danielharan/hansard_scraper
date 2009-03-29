@@ -11,6 +11,7 @@ class Extractor
   end
   
   def intervention(anchor)
+    anchor.gsub!(/^#/, '')
     intervention = Intervention.new
     element = (@contents / "a[@name='#{anchor}']").first
     
