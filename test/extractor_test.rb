@@ -4,7 +4,7 @@ require 'hpricot'
 
 class ExtractorTest < Test::Unit::TestCase
   def setup
-    @extractor = Extractor.new('../hansards/2009-09-12')
+    @extractor = Extractor.new('../hansards/2009-03-12.html')
   end
   
   def test_extract_initialize
