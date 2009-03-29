@@ -1,6 +1,5 @@
 
 BUGS:
-  -If an intervention has [Translation] (or [.*]), following paragraphs don't get extracted; e.g. Int-2655585
 
 TODO:
   -extract votes

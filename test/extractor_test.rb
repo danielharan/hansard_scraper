@@ -32,6 +32,13 @@ class ExtractorTest < Test::Unit::TestCase
     assert_equal 4, intervention.paragraphs.length
   end
   
+  def test_intervention_with_bracketed_notes_between_paragrahs
+    intervention = @extractor.intervention('#Int-2655585')
+    
+    assert_match /^I am now prepared to rule/, intervention.paragraphs.first
+    assert_equal "The hon. whip of the Bloc Québécois on a point of order.", intervention.paragraphs.last
+  end
+  
   def test_extract_toc
     toc = @extractor.toc
         

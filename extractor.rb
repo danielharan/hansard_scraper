@@ -31,9 +31,14 @@ class Extractor
   def extract_following_paragraphs(p)
     paras = []
     while (p = p.next_sibling) do
-      break unless p.name == 'a' && p.attributes['name'].match(/Para.*/)
-      p = p.next_sibling
-      paras << strip_inner(p)
+      if p.name == 'a' && p.attributes['name'].match(/Para.*/)
+        p = p.next_sibling # following paragraph is actually what interests us
+        paras << strip_inner(p)
+      elsif p.inner_text.match(/^\[(.*)\]/) # procedural notes like [<i>Translation</i>]
+        paras << "<div class='procedural'>#{p.inner_text}</div>"
+      else
+        break
+      end
     end
     paras
   end
