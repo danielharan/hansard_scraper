@@ -32,13 +32,22 @@ class ExtractorTest < Test::Unit::TestCase
     assert_equal 4, intervention.paragraphs.length
   end
   
+  def test_extractor_on_last_toc
+    e = (@extractor.contents / "div[@id='ob2660572']").first
+    assert_not_nil e
+    elems = @extractor.send(:extract_toc_level2, "Royal Assent", e)
+  end
+  
   def test_extract_toc
     toc = @extractor.toc
-    assert_equal 331, toc.length
-    
+        
     assert_equal "#Int-2655585", toc.first.anchor
     assert_equal "Oral Questions--Speaker's Ruling", toc.first.header3
     assert_equal "Points of Order", toc.first.header2
     assert_equal "", toc.first.header1
+    
+    assert_equal "#Int-2660566", toc.last.anchor
+    
+    assert_equal 331, toc.length
   end
 end
