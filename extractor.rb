@@ -46,27 +46,39 @@ class Extractor
   end
   
   def toc
-    header1   = ''
-    toc_links = []
+    links = []
+    header1, header2, header3 = '', '', ''
+    
+    toc_elements.each do |toc_element|
+      case toc_element.attributes["class"]
+      when 'TocObTitle'
+        header1, header2, header3 = inner_toc_link(toc_element) || '', '', ''
+      when 'TocSbTitle'
+        header2, header3 = inner_toc_link(toc_element), ''
+      when 'toc_SOBQualifier'
+        header3 = inner_toc_link(toc_element)
+      when 'toc_Intervention'
+        links << TocLink.new(header1, header2, header3, intervention_anchor(toc_element))
+      end
+    end
+    
+    links
+  end
+  
+  def toc_elements
+    ary = []
     toc_start = (@contents / "a[@href='#EndOfToc']").first
     toc_end   = (@contents / "a[@name='EndOfToc']").first
     
     Hpricot::Elements.expand(toc_start, toc_end).each do |toc_element|
       next if toc_element.is_a?(Hpricot::Text) ||  toc_element.name != "div"
-      
-      case toc_element.attributes["class"]
-      when 'TocObTitle'
-        header1 = inner_toc_link(toc_element) || ''
-      when 'toc_level2'
-        toc_links << extract_toc_level2(header1, toc_element)
-      else
-        #puts "NEXT!"
-        next
-      end
+      ary << toc_element
+      ary += (toc_element / 'div') if toc_element.attributes['class'] == 'toc_level2'
     end
-    toc_links.flatten
+    
+    ary
   end
-  
+
   private
     def strip_inner(el)
       el.inner_text.strip.gsub(/^\?*/,'')
@@ -75,47 +87,6 @@ class Extractor
     def inner_toc_link(e)
       matches = (e / "a[@class='tocLink']")
       matches.any? ? matches.inner_text.strip : nil
-    end
-    
-    def extract_toc_level2(header1, element)
-      # FIXME: this is fugly and could break if they mix interventions under level2 and level
-      (element / "//div[@class='toc_level3']").length > 0 ? extract_toc_level2_containing_level3s(header1, element) : 
-                                                            extract_toc_level2_with_no_level3s(header1, element)
-    end
-    
-    def extract_toc_level2_with_no_level3s(header1, element)
-      links = []
-      header2, header3 = '', ''
-      (element / "div").each do |e|
-        case e.attributes["class"]
-        when 'TocSbTitle'
-          header2 = inner_toc_link(e)
-        when 'toc_Intervention'
-          links << TocLink.new(header1, header2, '', intervention_anchor(e))
-        end
-      end
-      links
-    end
-    
-    def extract_toc_level2_containing_level3s(header1, element)
-      links = []
-      header2, header3 = '', ''
-      (element / "div").each do |e|
-        case e.attributes["class"]
-        when 'TocSbTitle'
-          header2 = inner_toc_link(e)
-        when 'toc_level3'
-          (e / "div").each do |el|
-            case el.attributes["class"]
-            when 'toc_SOBQualifier'
-              header3 = inner_toc_link(el)
-            when 'toc_Intervention'
-              links << TocLink.new(header1, header2, header3, intervention_anchor(el))
-            end
-          end
-        end
-      end
-      links
     end
     
     def intervention_anchor(source)

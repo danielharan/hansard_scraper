@@ -32,12 +32,6 @@ class ExtractorTest < Test::Unit::TestCase
     assert_equal 4, intervention.paragraphs.length
   end
   
-  def test_extractor_on_last_toc
-    e = (@extractor.contents / "div[@id='ob2660572']").first
-    assert_not_nil e
-    elems = @extractor.send(:extract_toc_level2, "Royal Assent", e)
-  end
-  
   def test_extract_toc
     toc = @extractor.toc
         
@@ -49,5 +43,10 @@ class ExtractorTest < Test::Unit::TestCase
     assert_equal "#Int-2660566", toc.last.anchor
     
     assert_equal 331, toc.length
+  end
+  
+  def test_elements_between
+    elems = @extractor.toc_elements
+    assert_equal 331, elems.select {|e| e.name == 'div' && e.attributes['class'] == 'toc_Intervention'}.length
   end
 end
