@@ -1,8 +1,7 @@
 require 'rubygems'
 require 'hpricot'
 
-require File.join(File.dirname(__FILE__), 'intervention')
-require File.join(File.dirname(__FILE__), 'toc_link')
+%w{intervention toc_link division}.each {|f| require File.join(File.dirname(__FILE__), f) }
 
 class Extractor
   attr_accessor :contents
@@ -10,11 +9,21 @@ class Extractor
     @contents = Hpricot(IO.read(filename))
   end
   
-  def intervention(anchor)
-    anchor.gsub!(/^#/, '')
-    intervention = Intervention.new
-    element = (@contents / "a[@name='#{anchor}']").first
+  def division(anchor)
+    p = find_following(element_by_anchor(anchor), 'p')
     
+    yeas, nays, paired = [0,1,2].collect do |i| 
+      voters = ((p / "table//table")[i] / "font")[1..-1]
+      voters.nil? ? [] : voters.collect {|e| e.inner_text}
+    end
+    
+    Division.new(yeas, nays, paired)
+  end
+  
+  def intervention(anchor)
+    intervention = Intervention.new
+    
+    element = element_by_anchor(anchor)
     p = find_following(element, :p)
     
     intervention.link = (p / "//a[@class='WebOption'").first.attributes["href"]
@@ -97,5 +106,10 @@ class Extractor
     
     def intervention_anchor(source)
       (source / "a[@class='tocLink']").first.attributes["href"]
+    end
+    
+    def element_by_anchor(anchor)
+      anchor.gsub!(/^#/, '')
+      (@contents / "a[@name='#{anchor}']").first
     end
 end

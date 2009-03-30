@@ -7,6 +7,44 @@ class ExtractorTest < Test::Unit::TestCase
     @extractor = Extractor.new('../hansards/2009-03-12.html')
   end
   
+  def test_division
+    # TODO: (next) add this to what we get out of the TOC:
+    # <div class="toc_Division" xmlns:msxsl="urn:schemas-microsoft-com:xslt"><a class="tocLink" href="#Div-28"><b><i>
+    
+    division = @extractor.division("#Div-28")
+    
+    yeas = ["Allen (Welland)", "Atamanenko", "Bevington", "Charlton", "Chow", "Christopherson", "Comartin", "Crowder", 
+            "Cullen", "Davies (Vancouver East)", "Duncan (Edmonton—Strathcona)", "Godin", "Gravelle", "Hughes", "Julian", 
+            "Layton", "Leslie", "Maloway", "Marston", "Martin (Winnipeg Centre)", "Martin (Sault Ste. Marie)", "Masse", 
+            "Rafferty", "Savoie", "Siksay", "Stoffer", "Wasylycia-Leis"]
+    nays = ["Abbott", "Ablonczy", "Aglukkaq", "Albrecht", "Allen (Tobique—Mactaquac)", "Allison", "Ambrose", "Anderson", "Andrews", 
+            "Ashfield", "Bagnell", "Bains", "Beaudin", "Bélanger", "Bennett", "Benoit", "Bernier", "Bezan", "Bigras", "Blackburn", 
+            "Blaney", "Block", "Bouchard", "Boucher", "Boughen", "Braid", "Breitkreuz", "Brown (Leeds—Grenville)", "Brown (Newmarket—Aurora)", 
+            "Brown (Barrie)", "Bruinooge", "Brunelle", "Byrne", "Cadman", "Calandra", "Calkins", "Cannan (Kelowna—Lake Country)", "Cannis", 
+            "Carrie", "Carrier", "Casson", "Chong", "Clarke", "Clement", "Coady", "Coderre", "Cotler", "Cuzner", "D'Amours", "Davidson", "Day", 
+            "DeBellefeuille", "Dechert", "Del Mastro", "Demers", "Desnoyers", "Devolin", "Dhaliwal", "Dion", "Dorion", "Dreeshen", "Dufour", 
+            "Duncan (Vancouver Island North)", "Duncan (Etobicoke North)", "Dykstra", "Easter", "Eyking", "Faille", "Fast", "Finley", 
+            "Fletcher", "Fry", "Galipeau", "Gallant", "Garneau", "Glover", "Goodale", "Goodyear", "Gourde", "Grewal", "Guarnieri", "Guergis", 
+            "Guimond (Rimouski-Neigette—Témiscouata—Les Basques)", "Hall Findlay", "Harper", "Harris (Cariboo—Prince George)", "Hawn", "Hiebert", 
+            "Hill", "Hoback", "Hoeppner", "Holder", "Jean", "Jennings", "Kamp (Pitt Meadows—Maple Ridge—Mission)", "Kania", "Karygiannis", 
+            "Keddy (South Shore—St. Margaret's)", "Kenney (Calgary Southeast)", "Kent", "Kerr", "Komarnicki", "Kramp (Prince Edward—Hastings)", 
+            "Laframboise", "Lake", "Lauzon", "Lebel", "Lee", "Lemieux", "Lobb", "Lukiwski", "Lunn", "Lunney", "MacKenzie", "Malhi", "Malo", "Mayes", 
+            "McColeman", "McGuinty", "McKay (Scarborough—Guildwood)", "McTeague", "Ménard (Marc-Aurèle-Fortin)", "Mendes", "Menzies", "Merrifield", 
+            "Miller", "Minna", "Moore (Fundy Royal)", "Murphy (Charlottetown)", "Murray", "Nicholson", "Norlock", "O'Connor", "O'Neill-Gordon", 
+            "Obhrai", "Oda", "Oliphant", "Pacetti", "Paquette", "Paradis", "Patry", "Payne", "Pearson", "Petit", "Poilievre", "Prentice", "Preston", 
+            "Proulx", "Raitt", "Rajotte", "Rathgeber", "Regan", "Reid", "Richards", "Richardson", "Rickford", "Rodriguez", "Russell", "Saxton",
+            "Scarpaleggia", "Scheer", "Schellenberger", "Shea", "Shipley", "Silva", "Simms", "Simson", "Smith", "Sorenson", "St-Cyr", "Stanton",
+            "Storseth", "Strahl", "Sweet", "Szabo", "Thompson", "Tilson", "Toews", "Trost", "Trudeau", "Tweed", "Uppal", "Valeriote", "Van Kesteren",
+            "Van Loan", "Vellacott", "Verner", "Vincent", "Wallace", "Warawa", "Warkentin", "Watson", 
+            "Weston (West Vancouver—Sunshine Coast—Sea to Sky Country)", "Weston (Saint John)", "Wilfert", "Wong", "Woodworth", "Wrzesnewskyj", 
+            "Yelich", "Young", "Zarac"]
+    paired = [] # FIXME: need an example of paired to sanity check
+    
+    assert_equal yeas,   division.yeas
+    assert_equal nays,   division.nays
+    assert_equal paired, division.paired
+  end
+  
   def test_extract_initialize
     assert_not_nil @extractor.contents
     assert @extractor.contents.is_a?(Hpricot::Doc)
