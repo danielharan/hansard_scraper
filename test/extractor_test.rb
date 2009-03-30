@@ -38,11 +38,16 @@ class ExtractorTest < Test::Unit::TestCase
             "Van Loan", "Vellacott", "Verner", "Vincent", "Wallace", "Warawa", "Warkentin", "Watson", 
             "Weston (West Vancouver—Sunshine Coast—Sea to Sky Country)", "Weston (Saint John)", "Wilfert", "Wong", "Woodworth", "Wrzesnewskyj", 
             "Yelich", "Young", "Zarac"]
-    paired = [] # FIXME: need an example of paired to sanity check
+    paired = []
     
     assert_equal yeas,   division.yeas
     assert_equal nays,   division.nays
     assert_equal paired, division.paired
+  end
+  
+  def test_division_for_paired
+    division = Extractor.new('../hansards/2009-03-10.html').division("#Div-25")
+    assert_equal ["Clement", "Ouellet", "Paillé", "Weston (Saint John)"], division.paired
   end
   
   def test_extract_initialize
