@@ -2,6 +2,9 @@
 BUGS:
 
 TODO:
+  -correlate intervention anchor with member_id
   -correlate votes to scraped members
   -handle written questions
   -extract time marks
+  
+  -produce output that can be verified by a human
