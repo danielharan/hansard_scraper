@@ -60,6 +60,7 @@ class ExtractorTest < Test::Unit::TestCase
     assert_not_nil intervention
     expected_link = "/HousePublications/GetWebOptionsCallBack.aspx?SourceSystem=PRISM&ResourceType=Affiliation&ResourceID=128173&language=1&DisplayMode=2"
     assert_equal expected_link, intervention.link
+    assert_equal "Mr. Michel Guimond (Montmorency—Charlevoix—Haute-Côte-Nord, BQ)", intervention.name
     assert_equal 2, intervention.paragraphs.length
     
     first = "Mr. Speaker, I cannot appeal your ruling, nor do I wish to, but I did ask for corrective action. With all due respect, it seems to me that you have not made it clear enough whether you want the minister to withdraw her offensive statements."

@@ -26,7 +26,9 @@ class Extractor
     element = element_by_anchor(anchor)
     p = find_following(element, :p)
     
-    intervention.link = (p / "//a[@class='WebOption'").first.attributes["href"]
+    top_link          = (p / "//a[@class='WebOption'").first
+    intervention.link = top_link.attributes["href"]
+    intervention.name = top_link.inner_text
     intervention.paragraphs = [extract_first_paragraph(p), *extract_following_paragraphs(p) ]
     
     intervention

@@ -1,3 +1,3 @@
 class Intervention
-  attr_accessor :link, :paragraphs
+  attr_accessor :name, :link, :paragraphs
 end
