@@ -10,8 +10,35 @@ class Extractor
   end
   
   def extract_tree!
-    toc_links = toc
-    @headers1 = ArrayUtils.firsts_in_sequence( toc_links.collect {|t| t.header1} ).collect {|h1| Header.new(h1)}
+    @headers1  = []
+    h1, h2, h3 = nil, nil, nil
+    toc_element = nil
+    
+    toc_elements.each do |toc_element|
+      case toc_element.attributes["class"]
+      when 'TocObTitle'
+        h1, h2, h3 = Header.new(inner_toc_link(toc_element) || ''), nil, nil
+        @headers1 << h1
+      when 'TocSbTitle'
+        h2, h3 = Header.new(inner_toc_link(toc_element)), nil
+        h1.sub_headers << h2
+      when 'toc_SOBQualifier'
+        h2 = empty_header_for(h1) if h2.nil?
+        h3 = Header.new(inner_toc_link(toc_element))
+        h2.sub_headers << h3
+      when 'toc_Intervention'
+        h2 = empty_header_for(h1) if h2.nil?
+        h3 = empty_header_for(h2) if h3.nil?
+        h3.interventions << intervention(intervention_anchor(toc_element))
+      end
+    end
+    
+    @headers1
+    
+  rescue NoMethodError => nme
+    puts "h1, h2, h3: #{h1}, #{h2}, #{h3}"
+    puts "toc_element: #{toc_element}"
+    puts "got a NoMethodError: #{nme.inspect}"
   end
   
   def division(anchor)
@@ -118,5 +145,11 @@ class Extractor
         return element if element.name == element_type.to_s
       end
       raise "oops"
+    end
+    
+    def empty_header_for(parent)
+      ret = Header.new('')
+      parent.sub_headers << ret
+      ret
     end
 end
