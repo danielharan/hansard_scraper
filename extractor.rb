@@ -1,12 +1,17 @@
 require 'rubygems'
 require 'hpricot'
 
-%w{intervention toc_link division}.each {|f| require File.join(File.dirname(__FILE__), f) }
+%w{intervention toc_link division array_utils}.each {|f| require File.join(File.dirname(__FILE__), f) }
 
 class Extractor
-  attr_accessor :contents
+  attr_accessor :contents, :headers1
   def initialize(filename)
     @contents = Hpricot(IO.read(filename))
+  end
+  
+  def extract_tree!
+    toc_links = toc
+    @headers1 = ArrayUtils.firsts_in_sequence( toc_links.collect {|t| t.header1} ).collect {|h1| Header.new(h1)}
   end
   
   def division(anchor)

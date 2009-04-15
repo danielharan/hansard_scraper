@@ -100,4 +100,10 @@ class ExtractorTest < Test::Unit::TestCase
     elems = @extractor.toc_elements
     assert_equal 331, elems.select {|e| e.name == 'div' && e.attributes['class'] == 'toc_Intervention'}.length
   end
+  
+  def test_extract_tree
+    @extractor.extract_tree!
+    assert_not_nil @extractor.headers1
+    assert_equal 10, @extractor.headers1.length
+  end
 end
