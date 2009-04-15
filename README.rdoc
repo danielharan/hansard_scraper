@@ -2,12 +2,20 @@
 
 Parliament's minutes ("Hansard") are stuck in the age of dead trees. This project is a first step to making them really digital.
 
+The objective of this scraper is to extract structured content from a Hansard page. Anyone can use it, although it was originally created for use by citizen-factory, "Hansard 2.0":
+http://github.com/danielharan/citizen-factory/tree/master
 
-= Background
+== Try it
 
-The last session:
+ruby output.rb > semantic.html
+
+It's effing slow: it takes around 2 minutes on a macbook pro
+
+The code's also not the prettiest.
+
+== About the data
+
+The last session of parliament as of writing:
 http://www2.parl.gc.ca/housechamberbusiness/chambersittings.aspx?Parl=40&Ses=2&Language=E&Mode=2
 
 A couple sample pages are saved in hansards/
-
-The objective of the project is to extract structured data from that html soup.
