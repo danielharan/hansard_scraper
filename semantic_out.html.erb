@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>Hansard</title>
+    <style type="text/css">
+      div.intervention
+      {
+      padding-top: 15px
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Hansard extracted from <%= date %></h1>
+    
+    <% extractor.headers1.each do |l1| %>
+      <h2><%= l1.title %></h2>
+      
+      <% l1.sub_headers.each do |l2| %>
+        <h3><%= l2.title %></h3>
+        
+        <% l2.sub_headers.each do |l3| %>
+          <h4><%= l3.title %></h4>
+          
+          <% l3.interventions.each do |intervention| %>
+            <div class="intervention">
+              <div class="intervenor"><a href="<%= intervention.link %>"><%= intervention.name %></a></div>
+              <div class="intervention_contents">
+                <%= intervention.paragraphs %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </body>
+</html>

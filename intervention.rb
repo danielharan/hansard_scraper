@@ -3,10 +3,10 @@ class Intervention
 end
 
 class Header
-  attr_accessor :name, :sub_headers, :interventions
+  attr_accessor :title, :sub_headers, :interventions
   
-  def initialize(name)
-    @name = name
+  def initialize(title)
+    @title = title
     @sub_headers, @interventions = [], []
   end
 end
