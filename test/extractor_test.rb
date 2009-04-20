@@ -73,14 +73,22 @@ class ExtractorTest < Test::Unit::TestCase
   def test_intervention_with_multiple_paragraphs
     intervention = @extractor.intervention('#Int-2655773')
     assert_not_nil intervention
-    assert_equal 4, intervention.paragraphs.length
+    assert_equal 5, intervention.paragraphs.length
   end
   
   def test_intervention_with_bracketed_notes_between_paragrahs
     intervention = @extractor.intervention('#Int-2655585')
     
     assert_match /^I am now prepared to rule/, intervention.paragraphs.first
-    assert_equal "The hon. whip of the Bloc Québécois on a point of order.", intervention.paragraphs.last
+    assert_equal "The hon. whip of the Bloc Québécois on a point of order.", intervention.paragraphs[-2]
+    assert_equal "<div class='timestamp'>(1010)</div>", intervention.paragraphs.last
+  end
+  
+  def test_intervention_with_timestamp_between_paragraphs
+    intervention = @extractor.intervention('#Int-2656407')
+    
+    assert_equal "<div class='timestamp'>(1050)</div>", intervention.paragraphs[21]
+    assert_equal "Omar Khadr's repatriation is long overdue. The bottom line is we must bring Omar Khadr home.", intervention.paragraphs.last
   end
   
   def test_extract_toc

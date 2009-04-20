@@ -77,6 +77,9 @@ class Extractor
       if p.name == 'a' && p.attributes['name'].match(/Para.*/)
         p = p.next_sibling # following paragraph is actually what interests us
         paras << strip_inner(p)
+      elsif p.name == 'a'&& p.attributes['name'].match(/T(.*)/)
+         p = p.next_sibling # discard nav; we're only interested in the timestamp
+         paras << "<div class='timestamp'>(#{$1})</div>"
       elsif p.inner_text.match(/^\[(.*)\]/) # procedural notes like [<i>Translation</i>]
         paras << "<div class='procedural'>#{p.inner_text}</div>"
       else

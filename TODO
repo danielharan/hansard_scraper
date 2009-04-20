@@ -3,7 +3,6 @@ BUGS:
   interventions:
     formatting gets lost
     links inside also get lost
-    missing text after timestamps
 
 TODO:
   -correlate intervention anchor with member_id
