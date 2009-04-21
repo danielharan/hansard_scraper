@@ -1,13 +1,3 @@
 
-BUGS:
-  interventions:
-    formatting gets lost
-    links inside also get lost
-
-TODO:
-  -correlate intervention anchor with member_id
-  -correlate votes to scraped members
+  -preserve links inside interventions
   -handle written questions
-  -extract time marks
-  
-  -produce output that can be verified by a human

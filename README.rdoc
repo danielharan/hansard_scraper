@@ -13,6 +13,10 @@ It's effing slow: it takes around 2 minutes on a macbook pro
 
 The code's also not the prettiest.
 
+== Limitation
+
+The project does not try to resolve / disambiguate members or bills. URLs are preserved so the importing application can do so.
+
 == About the data
 
 The last session of parliament as of writing:
