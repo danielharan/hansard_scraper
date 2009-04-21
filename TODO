@@ -3,8 +3,6 @@ BUGS:
   interventions:
     formatting gets lost
     links inside also get lost
-  time stamps:
-    in 2009-03-12 the (1020) mark is missing, probably because it's not inside an intervention
 
 TODO:
   -correlate intervention anchor with member_id

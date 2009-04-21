@@ -99,6 +99,12 @@ class ExtractorTest < Test::Unit::TestCase
     assert_equal "Omar Khadr's repatriation is long overdue. The bottom line is we must bring Omar Khadr home.", intervention.paragraphs.last
   end
   
+  def test_timestamp_after_a_paragraph_gets_picked_up
+    intervention = @extractor.intervention('#Int-2655875')
+    assert_equal 6, intervention.paragraphs.length
+    assert_equal "<div class='timestamp'>(1020)</div>", intervention.paragraphs.last
+  end
+  
   def test_extract_toc
     toc = @extractor.toc
         
