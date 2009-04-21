@@ -24,7 +24,9 @@
             <div class="intervention">
               <div class="intervenor"><a href="<%= intervention.link %>"><%= intervention.name %></a></div>
               <div class="intervention_contents">
-                <%= intervention.paragraphs %>
+                <% intervention.paragraphs.each do |p| %>
+                  <p><%= p %></p>
+                <% end %>
               </div>
             </div>
           <% end %>
