@@ -76,6 +76,14 @@ class ExtractorTest < Test::Unit::TestCase
     assert_equal 5, intervention.paragraphs.length
   end
   
+  def test_intervention_contains_procedural_text
+    intervention = @extractor.intervention('#Int-2656184')
+    assert_not_nil intervention
+    expected = "moved for leave to introduce Bill C-19, An Act to amend the Criminal Code (investigative hearing and recognizance with conditions)."
+    assert_equal expected, intervention.paragraphs.first
+    assert_equal "<div class='procedural_text'>(Motions deemed adopted, bill read the first time and printed)</div>", intervention.paragraphs.last
+  end
+  
   def test_intervention_with_bracketed_notes_between_paragrahs
     intervention = @extractor.intervention('#Int-2655585')
     
