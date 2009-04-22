@@ -1,5 +1,5 @@
 require 'test_helper'
-require '../intervention'
+require File.join(File.dirname(__FILE__), '..', 'intervention')
 
 class InterventionTest < Test::Unit::TestCase
   def test_initialize

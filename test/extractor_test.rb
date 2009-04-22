@@ -1,10 +1,10 @@
 require 'test_helper'
-require '../extractor'
+require File.join(File.dirname(__FILE__), '..', 'extractor')
 require 'hpricot'
 
 class ExtractorTest < Test::Unit::TestCase
   def setup
-    @extractor = Extractor.new('../hansards/2009-03-12.html')
+    @extractor = Extractor.new(File.join(File.dirname(__FILE__), '..', '/hansards/2009-03-12.html'))
   end
   
   def test_division
@@ -46,7 +46,7 @@ class ExtractorTest < Test::Unit::TestCase
   end
   
   def test_division_for_paired
-    division = Extractor.new('../hansards/2009-03-10.html').division("#Div-25")
+    division = Extractor.new(File.join(File.dirname(__FILE__), '..', '/hansards/2009-03-10.html')).division("#Div-25")
     assert_equal ["Clement", "Ouellet", "Paillé", "Weston (Saint John)"], division.paired
   end
   

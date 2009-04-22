@@ -1,5 +1,5 @@
 require 'test_helper'
-require '../array_utils'
+require File.join(File.dirname(__FILE__), '..', 'array_utils')
 
 class ArrayUtilsTest < Test::Unit::TestCase
   def test_firsts_in_sequence
