@@ -1,9 +1,10 @@
 require 'rubygems'
 require 'hpricot'
 
-%w{intervention toc_link division array_utils}.each {|f| require File.join(File.dirname(__FILE__), f) }
+%w{intervention toc_link division array_utils hpricot_extractor header}.each {|f| require File.join(File.dirname(__FILE__), f) }
 
 class Extractor
+  include HpricotExtractor
   attr_accessor :contents, :headers1
   def initialize(filename)
     @contents = Hpricot(IO.read(filename))
@@ -42,7 +43,7 @@ class Extractor
   end
   
   def division(anchor)
-    p = find_following(element_by_anchor(anchor), 'p')
+    p = find_following(element_by_anchor(@contents, anchor), 'p')
     
     yeas, nays, paired = [0,1,2].collect do |i| 
       voters = ((p / "table//table")[i] / "font")[1..-1]
@@ -53,47 +54,7 @@ class Extractor
   end
   
   def intervention(anchor)
-    intervention = Intervention.new
-    
-    element = element_by_anchor(anchor)
-    p = find_following(element, :p)
-    
-    top_link          = (p / "//a[@class='WebOption'").first
-    intervention.link = top_link.attributes["href"]
-    intervention.name = top_link.inner_text
-    intervention.paragraphs = [extract_first_paragraph(p), *extract_following_paragraphs(p) ]
-    
-    intervention
-  end
-  
-  def extract_first_paragraph(p)
-    (p / "div/div").remove
-    strip_inner(p)
-  end
-  
-  def extract_following_paragraphs(p)
-    paras = []
-    while (p = p.next_sibling) do
-      if p.name == 'a' && p.attributes['name'].match(/Para.*/)
-        p = p.next_sibling # following paragraph is actually what interests us
-        paras << strip_inner(p)
-      elsif p.name == 'a' && p.attributes['name'].match(/^PT/)
-        p = p.next_sibling
-        paras << "<div class='procedural_text'>#{strip_inner(p)}</div>"
-      elsif p.inner_text.match(/^\[(.*)\]/) # procedural notes like [<i>Translation</i>]
-        paras << "<div class='procedural'>#{p.inner_text}</div>"
-      elsif p.name == 'a' && p.attributes['name'].match(/^T(.*)/)
-        p = p.next_sibling # discard nav; we're only interested in the timestamp
-        paras << "<div class='timestamp'>(#{$1})</div>"
-      elsif p.name == 'p' && p.next_sibling.attributes['name'] && p.next_sibling.attributes['name'].match(/^T(.*)/)
-        # sometimes the timestamp is after the divider, just before the next heading :S
-        paras << "<div class='timestamp'>(#{$1})</div>"
-        break
-      else
-        break
-      end
-    end
-    paras
+    Intervention.new(@contents, anchor)
   end
   
   def toc
@@ -131,10 +92,6 @@ class Extractor
   end
 
   private
-    def strip_inner(el)
-      el.inner_text.strip.gsub(/^\?*/,'').strip
-    end
-    
     def inner_toc_link(e)
       matches = (e / "a[@class='tocLink']")
       matches.any? ? matches.inner_text.strip : nil
@@ -142,19 +99,6 @@ class Extractor
     
     def intervention_anchor(source)
       (source / "a[@class='tocLink']").first.attributes["href"]
-    end
-    
-    def element_by_anchor(anchor)
-      anchor.gsub!(/^#/, '')
-      (@contents / "a[@name='#{anchor}']").first
-    end
-    
-    def find_following(element, element_type)
-      10.times do
-        element = element.next_sibling
-        return element if element.name == element_type.to_s
-      end
-      raise "oops"
     end
     
     def empty_header_for(parent)
