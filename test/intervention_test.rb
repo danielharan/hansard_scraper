@@ -33,7 +33,8 @@ class InterventionTest < Test::Unit::TestCase
   
   def test_intervention_contains_procedural_text
     assert_not_nil intervention = Intervention.new(@hansard, '#Int-2656184')
-    expected = "moved for leave to introduce Bill C-19, An Act to amend the Criminal Code (investigative hearing and recognizance with conditions)."
+    expected = "moved for leave to introduce Bill <a href=\"/HousePublications/GetWebOptionsCallBack.aspx?SourceSystem=PRISM&amp;ResourceType=Document&amp;ResourceID=3735387&amp;language=1&amp;DisplayMode=2\" class=\"WebOption\">C-19, An Act to amend the Criminal Code (investigative hearing and recognizance with conditions)</a>."
+    
     assert_equal expected, intervention.paragraphs.first
     assert_equal "<div class='procedural_text'>(Motions deemed adopted, bill read the first time and printed)</div>", intervention.paragraphs.last
   end

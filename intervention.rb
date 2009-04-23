@@ -15,7 +15,7 @@ class Intervention
   
   def extract_first_paragraph(p)
     (p / "div/div").remove
-    strip_inner(p)
+    strip_inner_div(p)
   end
   
   def extract_following_paragraphs(p)
@@ -23,7 +23,7 @@ class Intervention
     while (p = p.next_sibling) do
       if p.name == 'a' && p.attributes['name'].match(/Para.*/)
         p = p.next_sibling # following paragraph is actually what interests us
-        paras << strip_inner(p)
+        paras << strip_inner_div(p)
       elsif p.name == 'a' && p.attributes['name'].match(/^PT/)
         p = p.next_sibling
         paras << "<div class='procedural_text'>#{strip_inner(p)}</div>"
@@ -46,5 +46,8 @@ class Intervention
   private
     def strip_inner(el)
       el.inner_text.strip.gsub(/^\?*/,'').strip
+    end
+    def strip_inner_div(el)
+      (el/"div").inner_html.strip.gsub(/&nbsp;/,'').strip
     end
 end
